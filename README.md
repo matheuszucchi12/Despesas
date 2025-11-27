@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Despesas</title>
+</head>
+<body>
+  <h2>Adicionar Despesa</h2>
+
+  <label>Descrição:</label>
+  <input type="text" id="descricao"><br><br>
+
+  <label>Categoria:</label>
+  <input type="text" id="categoria"><br><br>
+
+  <label>Data:</label>
+  <input type="date" id="data"><br><br>
+
+  <label>Valor:</label>
+  <input type="number" id="valor" step="0.01"><br><br>
+
+  <button onclick="enviar()">Enviar</button>
+
+  <p id="status"></p>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynUWDu68zlI-RwhT6CxzKmjioASG_Pd0d1Ka0ILw5xYis4xp1yL_SqZP7l4crXQyXp/exec";
+
+    async function enviar() {
+      const dados = {
+        descricao: document.getElementById("descricao").value,
+        categoria: document.getElementById("categoria").value,
+        data: document.getElementById("data").value,
+        valor: document.getElementById("valor").value
+      };
+
+      const req = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(dados),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const resposta = await req.json();
+
+      document.getElementById("status").innerText = 
+        resposta.status === "success" 
+          ? "Dados enviados com sucesso!"
+          : "Erro ao enviar.";
+    }
+  </script>
+</body>
+</html>
